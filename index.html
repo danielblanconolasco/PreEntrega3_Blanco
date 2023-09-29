@@ -39,20 +39,20 @@
             <div class="collapse navbar-collapse gap-2" id="menu-collapsed-content">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link white" href="#" id="tienda">Tienda</a>
+                        <a class="nav-link menu-white" href="#" id="tienda">Tienda</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mascotas</a>
+                        <a class="nav-link dropdown-toggle menu-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mascotas</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#" id="perro">Perros</a></li>
+                            <li><a class="dropdown-item drop-violet" href="#" id="perro">Perros</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#" id="gato">Gatos</a></li>
+                            <li><a class="dropdown-item drop-violet" href="#" id="gato">Gatos</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item ">
-                        <a class="nav-link d-none" aria-disabled="true" href="#" id="cartUpdate"><i class="fa-solid fa-cart-shopping white"></i> </a>
+                    <li class="nav-item">
+                        <a class="nav-link menu-white d-none" aria-disabled="true" href="#" id="cartUpdate" data-bs-toggle="modal" data-bs-target="#cartModal">Ver carrito <i class="fa-solid fa-cart-shopping white"></i> </a>
                     </li>
                 </ul>
                 <form class="d-flex w-auto gap-2" role="search">
@@ -65,13 +65,36 @@
 </header>
 <main>
     <div class="container">
-        <div class="row mt-5">
+        <div class="col-12 my-5">
+            <h1 class="violet-dark">Michigan Adopciones</h1>
+            <h3 class="violet-light">Tienda de productos de mascotas</h3>
+        </div>
+        <div class="row">
                 <div id="no-products-message" class="text-center text-muted">
                 No se encontraron productos.
                 </div>  
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2" id="products">
                 </div>
         </div>
+<!-- Modal -->
+<div class="modal fade" id="cartModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="cartModalLabel">Carrito de compras</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalCart">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary btn-sm btn-violet" id="comprar">Comprar</button>
+            </div>
+        </div>
+    </div>
+</div>
     </div>
 </main>
 <footer></footer>

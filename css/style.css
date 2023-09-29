@@ -58,4 +58,25 @@
   border: none;
 }
 
+#modalCart img {
+  width: 45px;
+}
+
+header .menu-white, header .show {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+header .menu-white:active, header .menu-white:visited, header .menu-white:active, header .menu-white:focus, header .show:active, header .show:visited, header .show:active, header .show:focus {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.drop-violet:active {
+  background-color: #5A1BA5;
+}
+
+#form-imput-search:focus {
+  box-shadow: none;
+}
+
 /*# sourceMappingURL=style.css.map */

@@ -134,17 +134,47 @@ let productos = [
         rutaImagen: "pups_cuerda_suave_multitextura.jpg",
         precio: 3990,
         stock: 4,
+        especie: "perro",
+    },
+    {
+        id: generarIDUnico(),
+        nombre: "Lanzador interactivo de pelotas",
+        marca: "AFP",
+        categoria: "Juguete",
+        rutaImagen: "interactive_fetch_mini.jpg",
+        precio: 120990,
+        stock: 4,
         especie: "gato / perro",
     },
     {
         id: generarIDUnico(),
-        nombre: "Pelota de juegos",
-        marca: "ABC Toys",
+        nombre: "Air dog squeaks bone",
+        marca: "Kong",
         categoria: "Juguete",
-        rutaImagen: "pelota_juegos.webp",
-        precio: 3990,
+        rutaImagen: "air_dog_kong_squeak.jpg",
+        precio: 7990,
         stock: 4,
-        especie: "gato / perro",
+        especie: "perro",
+    },
+    {
+        id: generarIDUnico(),
+        nombre: "Cama anti estrés",
+        marca: "Fabricación propia",
+        categoria: "Bienestar",
+        rutaImagen: "cama_anti_stress.jpg",
+        precio: 13990,
+        stock: 4,
+        especie: "perro / gato",
+    },
+    {
+        id: generarIDUnico(),
+        nombre: "Cama Caracol",
+        marca: "Fabricación propia",
+        categoria: "Bienestar",
+        rutaImagen: "cama_caracol.jpg",
+        precio: 17990,
+        stock: 2,
+        especie: "perro / gato",
     },
 ]
 
@@ -269,7 +299,8 @@ function AddProductCart(productos, cart, id, form) {
                     nombre: productoBuscado.nombre,
                     precioUnitario: productoBuscado.variedad[selectedVarianteIndex].precio,
                     unidades: 1,
-                    subtotal: productoBuscado.variedad[selectedVarianteIndex].precio
+                    subtotal: productoBuscado.variedad[selectedVarianteIndex].precio,
+                    rutaImagen: productoBuscado.rutaImagen
                 })
             }
             productoBuscado.variedad[selectedVarianteIndex].stock--
@@ -280,26 +311,28 @@ function AddProductCart(productos, cart, id, form) {
     } else {
         if (productoBuscado.stock > 0) {
             if (productoEnCarrito) {
-                productoEnCarrito.unidades++
-                productoEnCarrito.subtotal = productoEnCarrito.unidades * productoEnCarrito.precioUnitario
+                productoEnCarrito.unidades++;
+                productoEnCarrito.subtotal = productoEnCarrito.unidades * productoEnCarrito.precioUnitario;
             } else {
+                // Agregar la propiedad rutaImagen al producto en el carrito
                 cart.push({
                     id: productoBuscado.id,
                     nombre: productoBuscado.nombre,
                     precioUnitario: productoBuscado.precio,
                     unidades: 1,
-                    subtotal: productoBuscado.precio
-                })
+                    subtotal: productoBuscado.precio,
+                    rutaImagen: productoBuscado.rutaImagen
+                });
             }
-            productoBuscado.stock--
-            localStorage.setItem("cart", JSON.stringify(cart))
+            productoBuscado.stock--;
+            localStorage.setItem("cart", JSON.stringify(cart));
         } else {
-            alert("No hay más stock del producto seleccionado")
+            alert("No hay más stock del producto seleccionado");
         }
     }
 
     // Actualizar el contador del carrito
-    updateCartCounter()
+    updateCartCounter();
 }
 
 function updateCartCounter() {
@@ -310,7 +343,7 @@ function updateCartCounter() {
         btnCart.classList.remove("d-none")
         if (!cartCounter) {
             cartCounter = document.createElement("span")
-            cartCounter.className = "badge text-bg-secondary"
+            cartCounter.className = "badge text-bg-warning"
             btnCart.appendChild(cartCounter)
         }
         cartCounter.textContent = cart.reduce((total, producto) => total + producto.unidades, 0)
@@ -320,7 +353,83 @@ function updateCartCounter() {
             cartCounter.remove()
         }
     }
+
+    // Función para lanzar modal con productos agregados
+    btnCart.addEventListener("click", () => {
+        popUpCart()
+    });
 }
+function popUpCart() {
+    let modalCart = document.getElementById("cartModal")
+    let modalBody = modalCart.querySelector(".modal-body")
+
+    // Borrar el contenido actual del modal
+    modalBody.innerHTML = ""
+
+    // Inicializamos la variable para calcular el total
+    let total = 0
+
+    cart.forEach((producto) => {
+        let productoDiv = document.createElement("div");
+        productoDiv.className = "mb-2";
+
+        // Agregar la imagen del producto
+        let imagenProducto = document.createElement("img");
+        imagenProducto.src = `./assets/img/${producto.rutaImagen}`;
+        imagenProducto.className = "cart-product-image";
+        productoDiv.appendChild(imagenProducto);
+
+        // Agregar el nombre del producto
+        let nombreProducto = document.createElement("span");
+        nombreProducto.textContent = producto.nombre;
+        nombreProducto.className = "cart-product-name";
+        productoDiv.appendChild(nombreProducto);
+
+        // Agregar la cantidad
+        let cantidadProducto = document.createElement("span");
+        cantidadProducto.textContent = `Cantidad: ${producto.unidades}`;
+        cantidadProducto.className = "cart-product-quantity";
+        productoDiv.appendChild(cantidadProducto);
+
+        // Calcular y agregar el subtotal
+        let subtotalProducto = document.createElement("span");
+        subtotalProducto.textContent = `Subtotal: $${producto.subtotal}`;
+        subtotalProducto.className = "cart-product-subtotal";
+        productoDiv.appendChild(subtotalProducto);
+
+        // Actualizar el total
+        total += producto.subtotal;
+
+        modalBody.appendChild(productoDiv);
+    });
+
+    // Agregar el total al final
+    let totalDiv = document.createElement("div");
+    totalDiv.className = "cart-total";
+    totalDiv.textContent = `Total: $${total}`;
+    modalBody.appendChild(totalDiv);
+
+
+}
+
+function comprar() {
+    let btnComprar = document.getElementById("comprar")
+    btnComprar.addEventListener("click", () => {
+        // Borramos los productos del carrito y localmente
+        cart = [] // Borra el carrito en memoria
+        localStorage.removeItem("cart") // Borra el carrito en el almacenamiento local
+        updateCartCounter() // Actualiza el contador del carrito
+    
+        let modalCart = document.getElementById("cartModal")
+        let modalBody = modalCart.querySelector(".modal-body")
+    
+        // Borrar el contenido actual del modal
+        modalBody.innerHTML = `Gracias por tu compra`
+
+        btnComprar.classList.toggle("d-none")
+    })
+}
+comprar()
 
 createCards(productos, cart)
 
@@ -356,7 +465,6 @@ btnGato.addEventListener("click", () => {
     let searchFilter = productos.filter(producto => producto.especie.toLowerCase().includes("gato"))
     createCards(searchFilter)
 })
-
 
 // Iniciar contador al cargar todo el DOM
 document.addEventListener("DOMContentLoaded", () => {
