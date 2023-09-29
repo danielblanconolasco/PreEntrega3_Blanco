@@ -1,0 +1,32 @@
+$violet-light: #5A1BA5;
+$violet-dark: #461483;
+$white: #ffffff;
+$grey-light: #868686;
+$grey-dark: #424242;
+$menu-color: #d7b7ff;
+$menu-footer: #B0B0B0;
+
+.white {
+    color: $white;
+}
+
+.violet-light {
+    color: #5A1BA5;
+}
+
+.violet-dark {
+    color: #461483;
+}
+
+.grey-light {
+    color: $grey-light
+}
+
+.grey-dark {
+    color: $grey-dark
+}
+
+.gradient-violet {
+    background: rgb(58, 20, 103);
+    background: linear-gradient(28deg, rgba(58, 20, 103, 1) 0%, rgba(90, 27, 165, 1) 100%);
+}

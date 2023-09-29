@@ -1,0 +1,8 @@
+.btn-violet {
+    background-color: $violet-light;
+    border: none;
+    &:hover{
+        background-color: $violet-dark;
+        border: none;
+    }
+}

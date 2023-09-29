@@ -1,0 +1,12 @@
+.logo {
+    height: 40px;
+    }
+.top-header {
+    background-color: $violet-dark
+}
+.nav-link {
+    color: $white;
+    &:hover {
+        color: $white;
+    }
+}

@@ -1,0 +1,61 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+}
+
+.white {
+  color: #ffffff;
+}
+
+.violet-light {
+  color: #5A1BA5;
+}
+
+.violet-dark {
+  color: #461483;
+}
+
+.grey-light {
+  color: #868686;
+}
+
+.grey-dark {
+  color: #424242;
+}
+
+.gradient-violet {
+  background: rgb(58, 20, 103);
+  background: linear-gradient(28deg, rgb(58, 20, 103) 0%, rgb(90, 27, 165) 100%);
+}
+
+.logo {
+  height: 40px;
+}
+
+.top-header {
+  background-color: #461483;
+}
+
+.nav-link {
+  color: #ffffff;
+}
+.nav-link:hover {
+  color: #ffffff;
+}
+
+.btn-violet {
+  background-color: #5A1BA5;
+  border: none;
+}
+.btn-violet:hover {
+  background-color: #461483;
+  border: none;
+}
+
+/*# sourceMappingURL=style.css.map */
