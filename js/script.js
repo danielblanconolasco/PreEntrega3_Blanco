@@ -8,11 +8,11 @@ function generarIDUnico() {
 let productos = [
     {
         id: generarIDUnico(),
-        nombre: "Purina Cat Chow",
+        nombre: "Cat Chow",
         marca: "Purina",
         categoria: "Alimento",
         rutaImagen: "purina_cat_chow_cat.jpg",
-        especie:"gato",
+        especie: "gato",
         variedad: [
             {
                 peso: 5,
@@ -28,11 +28,11 @@ let productos = [
     },
     {
         id: generarIDUnico(),
-        nombre: "Purina Gati",
+        nombre: "Gati",
         marca: "Purina",
         categoria: "Alimento",
         rutaImagen: "purina_gati_cat.jpg",
-        especie:"gato",
+        especie: "gato",
         variedad: [
             {
                 peso: 1,
@@ -54,7 +54,7 @@ let productos = [
         rutaImagen: "pelota_juegos.webp",
         precio: 3990,
         stock: 4,
-        especie:"gato / perro",
+        especie: "gato / perro",
     },
 ]
 
@@ -74,7 +74,6 @@ function createCards(productos, cart) {
         let noProductsMessage = document.getElementById("no-products-message")
         noProductsMessage.style.display = "none"
 
-        // Resto del código para crear las tarjetas de productos...
         productos.forEach(({ nombre, marca, precio, variedad, rutaImagen, id }) => {
             let colDiv = document.createElement("div")
             colDiv.className = "col"
@@ -98,8 +97,57 @@ function createCards(productos, cart) {
             cardBody.appendChild(titulo)
             cardBody.appendChild(marcaTexto)
 
-            // Resto del código para crear las tarjetas de productos...
-            // ...
+            if (variedad && variedad.length > 0) {
+                let form = document.createElement("form")
+                form.id = `form-${id}`
+                form.className = "flex-column"
+
+                variedad.forEach((variante, index) => {
+                    let label = document.createElement("label")
+                    label.className = "d-flex gap-2"
+
+                    let radioInput = document.createElement("input")
+                    radioInput.type = "radio"
+                    radioInput.name = `variante-${id}`
+                    radioInput.value = index
+                    radioInput.required = true
+
+                    let labelText = document.createTextNode(`${variante.peso} kg - $ ${variante.precio}`)
+
+                    label.appendChild(radioInput)
+                    label.appendChild(labelText)
+
+                    form.appendChild(label)
+                })
+
+                let submitButton = document.createElement("button")
+                submitButton.type = "submit"
+                submitButton.className = "btn btn-primary btn-sm btn-violet"
+                submitButton.innerHTML = `Agregar al carrito <i class="fa-solid fa-cart-shopping"></i>`
+
+                form.appendChild(submitButton)
+
+                form.addEventListener("submit", (e) => {
+                    e.preventDefault()
+                    AddProductCart(productos, cart, id, form)
+                })
+
+                cardBody.appendChild(form)
+            } else {
+                let precioTexto = document.createElement("p")
+                precioTexto.textContent = `$${precio}`
+
+                let addButton = document.createElement("button")
+                addButton.className = "btn btn-primary btn-sm btn-violet"
+                addButton.innerHTML = `Agregar al carrito <i class="fa-solid fa-cart-shopping"></i>`
+
+                addButton.addEventListener("click", () => {
+                    AddProductCart(productos, cart, id, null)
+                })
+
+                cardBody.appendChild(precioTexto)
+                cardBody.appendChild(addButton)
+            }
 
             cardProducto.appendChild(cardImage)
             cardProducto.appendChild(cardBody)
@@ -110,16 +158,15 @@ function createCards(productos, cart) {
     }
 }
 
-
 function AddProductCart(productos, cart, id, form) {
     let productoBuscado = productos.find(producto => producto.id === Number(id))
     let productoEnCarrito = cart.find(producto => producto.id === productoBuscado.id)
 
     if (productoBuscado.variedad && productoBuscado.variedad.length > 0) {
         // Si el producto tiene variedades, verificar la selección
-        let selectedVarianteIndex = -1;
+        let selectedVarianteIndex = -1
         if (form) {
-            selectedVarianteIndex = Number(form.querySelector(`input[name="variante-${id}"]:checked`).value);
+            selectedVarianteIndex = Number(form.querySelector(`input[name="variante-${id}"]:checked`).value)
         }
 
         if (selectedVarianteIndex >= 0 && productoBuscado.variedad[selectedVarianteIndex].stock > 0) {
@@ -162,7 +209,7 @@ function AddProductCart(productos, cart, id, form) {
     }
 
     // Actualizar el contador del carrito
-    updateCartCounter();
+    updateCartCounter()
 }
 
 function updateCartCounter() {
@@ -191,7 +238,7 @@ let botonBuscar = document.getElementById("search-button")
 let searchInput = document.getElementById("form-imput-search")
 
 botonBuscar.addEventListener("click", () => {
-    let searchText = searchInput.value.trim().toLowerCase();
+    let searchText = searchInput.value.trim().toLowerCase()
     let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText))
     createCards(searchFilter)
 })
@@ -213,12 +260,12 @@ btnPerro.addEventListener("click", () => {
     let searchFilter = productos.filter(producto => producto.especie.toLowerCase().includes("perro"))
     createCards(searchFilter)
 })
+
 let btnGato = document.getElementById("gato")
 btnGato.addEventListener("click", () => {
     let searchFilter = productos.filter(producto => producto.especie.toLowerCase().includes("gato"))
     createCards(searchFilter)
 })
-
 
 document.addEventListener("DOMContentLoaded", () => {
     updateCartCounter()
