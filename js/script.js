@@ -48,6 +48,96 @@ let productos = [
     },
     {
         id: generarIDUnico(),
+        nombre: "One",
+        marca: "Purina",
+        categoria: "Alimento",
+        rutaImagen: "purina_one_cat.jpg",
+        especie: "gato",
+        variedad: [
+            {
+                peso: 1.8,
+                stock: 6,
+                precio: 6990,
+            },
+            {
+                peso: 5.5,
+                stock: 7,
+                precio: 14990,
+            },
+        ],
+    },
+    {
+        id: generarIDUnico(),
+        nombre: "Dog Chow",
+        marca: "Purina",
+        categoria: "Alimento",
+        rutaImagen: "purina_dog_chow_dog.jpg",
+        especie: "perro",
+        variedad: [
+            {
+                peso: 5,
+                stock: 10,
+                precio: 13990,
+            },
+            {
+                peso: 10,
+                stock: 3,
+                precio: 26990,
+            },
+        ],
+    },
+    {
+        id: generarIDUnico(),
+        nombre: "One",
+        marca: "Purina",
+        categoria: "Alimento",
+        rutaImagen: "purina_one_dog.jpg",
+        especie: "perro",
+        variedad: [
+            {
+                peso: 1.8,
+                stock: 6,
+                precio: 6990,
+            },
+            {
+                peso: 5.5,
+                stock: 7,
+                precio: 14990,
+            },
+        ],
+    },
+    {
+        id: generarIDUnico(),
+        nombre: "Pelota de juegos",
+        marca: "ABC Toys",
+        categoria: "Juguete",
+        rutaImagen: "pelota_juegos.webp",
+        precio: 3990,
+        stock: 4,
+        especie: "gato / perro",
+    },
+    {
+        id: generarIDUnico(),
+        nombre: "Fury Ball",
+        marca: "AFP",
+        categoria: "Juguete",
+        rutaImagen: "all-for-paws-juguetes-para-gatos-furry-ball.jpg",
+        precio: 4690,
+        stock: 4,
+        especie: "gato",
+    },
+    {
+        id: generarIDUnico(),
+        nombre: "Pups cuerda suave multitextura",
+        marca: "AFP",
+        categoria: "Juguete",
+        rutaImagen: "pups_cuerda_suave_multitextura.jpg",
+        precio: 3990,
+        stock: 4,
+        especie: "gato / perro",
+    },
+    {
+        id: generarIDUnico(),
         nombre: "Pelota de juegos",
         marca: "ABC Toys",
         categoria: "Juguete",
@@ -254,7 +344,7 @@ function resetProducts() {
 let btnTienda = document.getElementById("tienda")
 btnTienda.addEventListener("click", resetProducts)
 
-// Evento al botón tipo de mascota para listar sus productos
+// Eventos al botón tipo de mascota para listar sus productos
 let btnPerro = document.getElementById("perro")
 btnPerro.addEventListener("click", () => {
     let searchFilter = productos.filter(producto => producto.especie.toLowerCase().includes("perro"))
@@ -267,6 +357,8 @@ btnGato.addEventListener("click", () => {
     createCards(searchFilter)
 })
 
+
+// Iniciar contador al cargar todo el DOM
 document.addEventListener("DOMContentLoaded", () => {
     updateCartCounter()
 })
