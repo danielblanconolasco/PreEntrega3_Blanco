@@ -426,9 +426,13 @@ function comprar() {
         // Borrar el contenido actual del modal
         modalBody.innerHTML = `Gracias por tu compra`
 
-        btnComprar.classList.toggle("d-none")
+        // Recargar la página
+        setTimeout(() => {
+            location.reload()
+        }, 2000)
     })
 }
+
 comprar()
 
 createCards(productos, cart)
