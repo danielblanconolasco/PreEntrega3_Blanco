@@ -311,8 +311,8 @@ function AddProductCart(productos, cart, id, form) {
     } else {
         if (productoBuscado.stock > 0) {
             if (productoEnCarrito) {
-                productoEnCarrito.unidades++;
-                productoEnCarrito.subtotal = productoEnCarrito.unidades * productoEnCarrito.precioUnitario;
+                productoEnCarrito.unidades++
+                productoEnCarrito.subtotal = productoEnCarrito.unidades * productoEnCarrito.precioUnitario
             } else {
                 // Agregar la propiedad rutaImagen al producto en el carrito
                 cart.push({
@@ -322,17 +322,17 @@ function AddProductCart(productos, cart, id, form) {
                     unidades: 1,
                     subtotal: productoBuscado.precio,
                     rutaImagen: productoBuscado.rutaImagen
-                });
+                })
             }
-            productoBuscado.stock--;
-            localStorage.setItem("cart", JSON.stringify(cart));
+            productoBuscado.stock--
+            localStorage.setItem("cart", JSON.stringify(cart))
         } else {
-            alert("No hay más stock del producto seleccionado");
+            alert("No hay más stock del producto seleccionado")
         }
     }
 
     // Actualizar el contador del carrito
-    updateCartCounter();
+    updateCartCounter()
 }
 
 function updateCartCounter() {
@@ -357,7 +357,7 @@ function updateCartCounter() {
     // Función para lanzar modal con productos agregados
     btnCart.addEventListener("click", () => {
         popUpCart()
-    });
+    })
 }
 function popUpCart() {
     let modalCart = document.getElementById("cartModal")
@@ -370,44 +370,44 @@ function popUpCart() {
     let total = 0
 
     cart.forEach((producto) => {
-        let productoDiv = document.createElement("div");
-        productoDiv.className = "mb-2";
+        let productoDiv = document.createElement("div")
+        productoDiv.className = "mb-2"
 
         // Agregar la imagen del producto
-        let imagenProducto = document.createElement("img");
-        imagenProducto.src = `./assets/img/${producto.rutaImagen}`;
-        imagenProducto.className = "cart-product-image";
-        productoDiv.appendChild(imagenProducto);
+        let imagenProducto = document.createElement("img")
+        imagenProducto.src = `./assets/img/${producto.rutaImagen}`
+        imagenProducto.className = "cart-product-image"
+        productoDiv.appendChild(imagenProducto)
 
         // Agregar el nombre del producto
-        let nombreProducto = document.createElement("span");
-        nombreProducto.textContent = producto.nombre;
-        nombreProducto.className = "cart-product-name";
-        productoDiv.appendChild(nombreProducto);
+        let nombreProducto = document.createElement("span")
+        nombreProducto.textContent = producto.nombre
+        nombreProducto.className = "cart-product-name"
+        productoDiv.appendChild(nombreProducto)
 
         // Agregar la cantidad
-        let cantidadProducto = document.createElement("span");
-        cantidadProducto.textContent = `Cantidad: ${producto.unidades}`;
-        cantidadProducto.className = "cart-product-quantity";
-        productoDiv.appendChild(cantidadProducto);
+        let cantidadProducto = document.createElement("span")
+        cantidadProducto.textContent = `Cantidad: ${producto.unidades}`
+        cantidadProducto.className = "cart-product-quantity"
+        productoDiv.appendChild(cantidadProducto)
 
         // Calcular y agregar el subtotal
-        let subtotalProducto = document.createElement("span");
-        subtotalProducto.textContent = `Subtotal: $${producto.subtotal}`;
-        subtotalProducto.className = "cart-product-subtotal";
-        productoDiv.appendChild(subtotalProducto);
+        let subtotalProducto = document.createElement("span")
+        subtotalProducto.textContent = `Subtotal: $${producto.subtotal}`
+        subtotalProducto.className = "cart-product-subtotal"
+        productoDiv.appendChild(subtotalProducto)
 
         // Actualizar el total
-        total += producto.subtotal;
+        total += producto.subtotal
 
-        modalBody.appendChild(productoDiv);
-    });
+        modalBody.appendChild(productoDiv)
+    })
 
     // Agregar el total al final
-    let totalDiv = document.createElement("div");
-    totalDiv.className = "cart-total";
-    totalDiv.textContent = `Total: $${total}`;
-    modalBody.appendChild(totalDiv);
+    let totalDiv = document.createElement("div")
+    totalDiv.className = "cart-total"
+    totalDiv.textContent = `Total: $${total}`
+    modalBody.appendChild(totalDiv)
 
 
 }
