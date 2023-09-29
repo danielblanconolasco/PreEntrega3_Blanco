@@ -39,16 +39,16 @@
             <div class="collapse navbar-collapse gap-2" id="menu-collapsed-content">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Tienda</a>
+                        <a class="nav-link white" href="#" id="tienda">Tienda</a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mascotas</a>
+                        <a class="nav-link white dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mascotas</a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Perros</a></li>
+                            <li><a class="dropdown-item" href="#" id="perro">Perros</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Gatos</a></li>
+                            <li><a class="dropdown-item" href="#" id="gato">Gatos</a></li>
                         </ul>
                     </li>
                     <li class="nav-item ">
@@ -57,7 +57,7 @@
                 </ul>
                 <form class="d-flex w-auto gap-2" role="search">
                     <input class="form-control" type="Buscar" placeholder="¿Qué producto estás buscando?" aria-label="Buscar" id="form-imput-search">
-                    <button class="btn btn-outline-warning white" type="submit">Buscar</button>
+                    <button class="btn btn-outline-warning white" type="submit" id="search-button">Buscar</button>
                 </form> 
             </div>
         </div>
@@ -65,7 +65,17 @@
 </header>
 <main>
     <div class="container">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-2" id="products">
+        <div class="row mt-5">
+            <div class="col-2">
+                <p>Carrito de compras</p>
+            </div>
+            <div class="col-10">
+                <div id="no-products-message" class="text-center text-muted">
+                No se encontraron productos.
+                </div>  
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-4 g-2" id="products">
+                </div>
+            </div>
         </div>
     </div>
 </main>

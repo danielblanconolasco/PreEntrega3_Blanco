@@ -12,6 +12,7 @@ let productos = [
         marca: "Purina",
         categoria: "Alimento",
         rutaImagen: "purina_cat_chow_cat.jpg",
+        especie:"gato",
         variedad: [
             {
                 peso: 5,
@@ -31,6 +32,7 @@ let productos = [
         marca: "Purina",
         categoria: "Alimento",
         rutaImagen: "purina_gati_cat.jpg",
+        especie:"gato",
         variedad: [
             {
                 peso: 1,
@@ -49,9 +51,10 @@ let productos = [
         nombre: "Pelota de juegos",
         marca: "ABC Toys",
         categoria: "Juguete",
-        rutaImagen: "pelota_juegos.jpg",
+        rutaImagen: "pelota_juegos.webp",
         precio: 3990,
         stock: 4,
+        especie:"gato / perro",
     },
 ]
 
@@ -62,88 +65,51 @@ function createCards(productos, cart) {
     let products = document.getElementById("products")
     products.innerHTML = ""
 
-    productos.forEach(({ nombre, marca, precio, variedad, rutaImagen, id }) => {
-        let colDiv = document.createElement("div")
-        colDiv.className = "col"
+    if (productos.length === 0) {
+        // No se encontraron productos, muestra el mensaje
+        let noProductsMessage = document.getElementById("no-products-message")
+        noProductsMessage.style.display = "block"
+    } else {
+        // Hay productos para mostrar, oculta el mensaje
+        let noProductsMessage = document.getElementById("no-products-message")
+        noProductsMessage.style.display = "none"
 
-        let cardProducto = document.createElement("div")
-        cardProducto.className = "card h-100"
+        // Resto del código para crear las tarjetas de productos...
+        productos.forEach(({ nombre, marca, precio, variedad, rutaImagen, id }) => {
+            let colDiv = document.createElement("div")
+            colDiv.className = "col"
 
-        let cardImage = document.createElement("img")
-        cardImage.className = "card-img-top"
-        cardImage.src = `./assets/img/${rutaImagen}`
+            let cardProducto = document.createElement("div")
+            cardProducto.className = "card h-100"
 
-        let cardBody = document.createElement("div")
-        cardBody.className = "card-body"
+            let cardImage = document.createElement("img")
+            cardImage.className = "card-img-top"
+            cardImage.src = `./assets/img/${rutaImagen}`
 
-        let titulo = document.createElement("h3")
-        titulo.textContent = nombre
+            let cardBody = document.createElement("div")
+            cardBody.className = "card-body"
 
-        let marcaTexto = document.createElement("h5")
-        marcaTexto.textContent = marca
+            let titulo = document.createElement("h3")
+            titulo.textContent = nombre
 
-        cardBody.appendChild(titulo)
-        cardBody.appendChild(marcaTexto)
+            let marcaTexto = document.createElement("h5")
+            marcaTexto.textContent = marca
 
-        if (variedad && variedad.length > 0) {
-            let form = document.createElement("form")
-            form.id = `form-${id}`
-            form.className = "flex-column"
+            cardBody.appendChild(titulo)
+            cardBody.appendChild(marcaTexto)
 
-            variedad.forEach((variante, index) => {
-                let label = document.createElement("label")
-                label.className = "d-flex gap-2"
+            // Resto del código para crear las tarjetas de productos...
+            // ...
 
-                let radioInput = document.createElement("input")
-                radioInput.type = "radio"
-                radioInput.name = `variante-${id}`
-                radioInput.value = index
-                radioInput.required = true
+            cardProducto.appendChild(cardImage)
+            cardProducto.appendChild(cardBody)
 
-                let labelText = document.createTextNode(`${variante.peso} kg - $ ${variante.precio}`)
-
-                label.appendChild(radioInput)
-                label.appendChild(labelText)
-
-                form.appendChild(label)
-            })
-
-            let submitButton = document.createElement("button")
-            submitButton.type = "submit"
-            submitButton.className = "btn btn-primary btn-sm btn-violet"
-            submitButton.innerHTML = `Agregar al carrito <i class="fa-solid fa-cart-shopping"></i>`
-
-            form.appendChild(submitButton)
-
-            form.addEventListener("submit", (e) => {
-                e.preventDefault()
-                AddProductCart(productos, cart, id, form)
-            })
-
-            cardBody.appendChild(form)
-        } else {
-            let precioTexto = document.createElement("p")
-            precioTexto.textContent = `$${precio}`
-
-            let addButton = document.createElement("button")
-            addButton.className = "btn btn-primary btn-sm btn-violet"
-            addButton.innerHTML = `Agregar al carrito <i class="fa-solid fa-cart-shopping"></i>`
-
-            addButton.addEventListener("click", () => {
-                AddProductCart(productos, cart, id, null)
-            })
-
-            cardBody.appendChild(precioTexto)
-            cardBody.appendChild(addButton)
-        }
-
-        cardProducto.appendChild(cardImage)
-        cardProducto.appendChild(cardBody)
-
-        colDiv.appendChild(cardProducto)
-        products.appendChild(colDiv)
-    })
+            colDiv.appendChild(cardProducto)
+            products.appendChild(colDiv)
+        })
+    }
 }
+
 
 function AddProductCart(productos, cart, id, form) {
     let productoBuscado = productos.find(producto => producto.id === Number(id))
@@ -221,6 +187,39 @@ function updateCartCounter() {
 
 createCards(productos, cart)
 
+let botonBuscar = document.getElementById("search-button")
+let searchInput = document.getElementById("form-imput-search")
+
+botonBuscar.addEventListener("click", () => {
+    let searchText = searchInput.value.trim().toLowerCase();
+    let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText))
+    createCards(searchFilter)
+})
+
+// Función para restablecer todos los productos sin filtrar
+function resetProducts() {
+    let searchInput = document.getElementById("form-imput-search")
+    searchInput.value = ""
+    createCards(productos, cart)
+}
+
+// Evento al botón tienda para restablecer los productos
+let btnTienda = document.getElementById("tienda")
+btnTienda.addEventListener("click", resetProducts)
+
+// Evento al botón tipo de mascota para listar sus productos
+let btnPerro = document.getElementById("perro")
+btnPerro.addEventListener("click", () => {
+    let searchFilter = productos.filter(producto => producto.especie.toLowerCase().includes("perro"))
+    createCards(searchFilter)
+})
+let btnGato = document.getElementById("gato")
+btnGato.addEventListener("click", () => {
+    let searchFilter = productos.filter(producto => producto.especie.toLowerCase().includes("gato"))
+    createCards(searchFilter)
+})
+
+
 document.addEventListener("DOMContentLoaded", () => {
-    updateCartCounter();
+    updateCartCounter()
 })
