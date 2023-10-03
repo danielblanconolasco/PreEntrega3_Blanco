@@ -245,14 +245,14 @@ function createCards(productos, cart) {
                 submitButton.className = "btn btn-primary btn-sm btn-violet"
                 submitButton.innerHTML = `Agregar al carrito <i class="fa-solid fa-cart-shopping"></i>`
 
-                form.appendChild(submitButton)
+                cardBody.appendChild(form)
+                cardBody.appendChild(submitButton)
 
                 form.addEventListener("submit", (e) => {
                     e.preventDefault()
                     AddProductCart(productos, cart, id, form)
                 })
 
-                cardBody.appendChild(form)
             } else {
                 let precioTexto = document.createElement("p")
                 precioTexto.textContent = `$${precio}`
@@ -473,4 +473,56 @@ btnGato.addEventListener("click", () => {
 // Iniciar contador al cargar todo el DOM
 document.addEventListener("DOMContentLoaded", () => {
     updateCartCounter()
+})
+
+
+// Filtro para categorias laterales
+function generarOpcionesCategoria(productos) {
+    const categoriaFiltro = document.getElementById("categoria-filtro")
+    const categorias = [...new Set(productos.map((producto) => producto.categoria))]
+
+    categorias.forEach((categoria) => {
+        const listItem = document.createElement("li")
+        listItem.innerHTML = `<label><input type="checkbox" value="${categoria}"> ${categoria}</label>`
+        categoriaFiltro.appendChild(listItem)
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Generar las opciones de categoría al cargar la página
+    generarOpcionesCategoria(productos)
+
+    const aplicarFiltrosBtn = document.getElementById("aplicar-filtros")
+    const limpiarFiltrosBtn = document.getElementById("limpiar-filtros")
+
+    aplicarFiltrosBtn.addEventListener("click", () => {
+        // Obtener los valores seleccionados para categoría y rango de precios
+        const categoriaSeleccionada = Array.from(document.querySelectorAll("#categoria-filtro input:checked")).map(
+            (checkbox) => checkbox.value
+        );
+        const precioMin = document.getElementById("precio-min").value
+        const precioMax = document.getElementById("precio-max").value
+
+        // Filtrar productos según los criterios seleccionados
+        const productosFiltrados = productos.filter((producto) => {
+            const categoriaCoincide = categoriaSeleccionada.length === 0 || categoriaSeleccionada.includes(producto.categoria)
+            const precioCoincide =
+                (!precioMin || producto.precio >= precioMin) && (!precioMax || producto.precio <= precioMax)
+            return categoriaCoincide && precioCoincide
+        });
+
+        // Actualizar la lista de productos con los productos filtrados
+        createCards(productosFiltrados, cart)
+    })
+
+    limpiarFiltrosBtn.addEventListener("click", () => {
+        // Limpiar los valores de categoría y rango de precios
+        document.querySelectorAll("#categoria-filtro input:checked").forEach((checkbox) => (checkbox.checked = false))
+        document.getElementById("precio-min").value = ""
+        document.getElementById("precio-max").value = ""
+
+        // Restablecer la lista de productos mostrando todos los productos
+        createCards(productos, cart)
+    })
 })

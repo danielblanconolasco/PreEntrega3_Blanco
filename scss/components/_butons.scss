@@ -1,8 +1,46 @@
 .btn-violet {
     background-color: $violet-light;
     border: none;
+    a {}
     &:hover{
         background-color: $violet-dark;
         border: none;
+        color: $white
+    }
+}
+
+.btn-violet-dark {
+    background-color: $violet-dark;
+
+    a {
+        color: $white;
+    }
+}
+
+.btn-violet-light {
+    background-color: $violet-light;
+    color: $white;
+    &:hover{
+        background-color: $violet-dark;
+        border: none;
+        color: $white;
+    }
+}
+
+.btn-border-dark {
+    border: .0625rem solid $violet-dark;
+
+    a {
+        color: $violet-dark;
+    }
+}
+
+.btn-border-light {
+    border: .0625rem solid $violet-light;
+    color: $violet-light;
+    &:hover{
+        background-color: $grey-light;
+        border: none;
+        color: $white;
     }
 }

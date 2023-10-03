@@ -10,3 +10,13 @@
         color: $white;
     }
 }
+#categoria-filtro {
+    list-style: none;
+    padding-left: 0;
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: .625rem;
+}

@@ -9,6 +9,10 @@
   font-weight: 300;
 }
 
+.bold {
+  font-weight: 700;
+}
+
 .white {
   color: #ffffff;
 }
@@ -49,6 +53,17 @@
   color: #ffffff;
 }
 
+#categoria-filtro {
+  list-style: none;
+  padding-left: 0;
+}
+
+#sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
 .btn-violet {
   background-color: #5A1BA5;
   border: none;
@@ -56,6 +71,41 @@
 .btn-violet:hover {
   background-color: #461483;
   border: none;
+  color: #ffffff;
+}
+
+.btn-violet-dark {
+  background-color: #461483;
+}
+.btn-violet-dark a {
+  color: #ffffff;
+}
+
+.btn-violet-light {
+  background-color: #5A1BA5;
+  color: #ffffff;
+}
+.btn-violet-light:hover {
+  background-color: #461483;
+  border: none;
+  color: #ffffff;
+}
+
+.btn-border-dark {
+  border: 0.0625rem solid #461483;
+}
+.btn-border-dark a {
+  color: #461483;
+}
+
+.btn-border-light {
+  border: 0.0625rem solid #5A1BA5;
+  color: #5A1BA5;
+}
+.btn-border-light:hover {
+  background-color: #868686;
+  border: none;
+  color: #ffffff;
 }
 
 #modalCart img {
