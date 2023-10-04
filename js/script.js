@@ -220,11 +220,11 @@ function createCards(productos, cart) {
             if (variedad && variedad.length > 0) {
                 let form = document.createElement("form")
                 form.id = `form-${id}`
-                form.className = "flex-column"
+                form.className = "list-group list-group-flush flex-column"
 
                 variedad.forEach((variante, index) => {
                     let label = document.createElement("label")
-                    label.className = "d-flex gap-2"
+                    label.className = "d-flex list-group-item gap-2 px-0"
 
                     let radioInput = document.createElement("input")
                     radioInput.type = "radio"
@@ -246,7 +246,7 @@ function createCards(productos, cart) {
                 submitButton.innerHTML = `Agregar al carrito <i class="fa-solid fa-cart-shopping"></i>`
 
                 cardBody.appendChild(form)
-                cardBody.appendChild(submitButton)
+                form.appendChild(submitButton)
 
                 form.addEventListener("submit", (e) => {
                     e.preventDefault()
@@ -255,10 +255,10 @@ function createCards(productos, cart) {
 
             } else {
                 let precioTexto = document.createElement("p")
-                precioTexto.textContent = `$${precio}`
+                precioTexto.textContent = `$ ${precio}`
 
                 let addButton = document.createElement("button")
-                addButton.className = "btn btn-primary btn-sm btn-violet"
+                addButton.className = "btn btn-primary btn-sm btn-violet w-100"
                 addButton.innerHTML = `Agregar al carrito <i class="fa-solid fa-cart-shopping"></i>`
 
                 addButton.addEventListener("click", () => {
@@ -279,66 +279,74 @@ function createCards(productos, cart) {
 }
 
 function AddProductCart(productos, cart, id, form) {
+    let selectedVarianteIndex = -1
+    
     let productoBuscado = productos.find(producto => producto.id === Number(id))
-    let productoEnCarrito = cart.find(producto => producto.id === productoBuscado.id)
-
-    if (productoBuscado.variedad && productoBuscado.variedad.length > 0) {
-        // Si el producto tiene variedades, verificar la selección
-        let selectedVarianteIndex = -1
-        if (form) {
-            selectedVarianteIndex = Number(form.querySelector(`input[name="variante-${id}"]:checked`).value)
-        }
-
-        if (selectedVarianteIndex >= 0 && productoBuscado.variedad[selectedVarianteIndex].stock > 0) {
-            if (productoEnCarrito) {
-                productoEnCarrito.unidades++
-                productoEnCarrito.subtotal = productoEnCarrito.unidades * productoEnCarrito.precioUnitario
-            } else {
-                cart.push({
-                    id: productoBuscado.id,
-                    nombre: productoBuscado.nombre,
-                    precioUnitario: productoBuscado.variedad[selectedVarianteIndex].precio,
-                    unidades: 1,
-                    subtotal: productoBuscado.variedad[selectedVarianteIndex].precio,
-                    rutaImagen: productoBuscado.rutaImagen
-                })
-            }
-            productoBuscado.variedad[selectedVarianteIndex].stock--
-            localStorage.setItem("cart", JSON.stringify(cart))
-        } else {
-            alert("No hay más stock de la variante seleccionada")
-        }
-    } else {
-        if (productoBuscado.stock > 0) {
-            if (productoEnCarrito) {
-                productoEnCarrito.unidades++
-                productoEnCarrito.subtotal = productoEnCarrito.unidades * productoEnCarrito.precioUnitario
-            } else {
-                // Agregar la propiedad rutaImagen al producto en el carrito
-                cart.push({
-                    id: productoBuscado.id,
-                    nombre: productoBuscado.nombre,
-                    precioUnitario: productoBuscado.precio,
-                    unidades: 1,
-                    subtotal: productoBuscado.precio,
-                    rutaImagen: productoBuscado.rutaImagen
-                })
-            }
-            productoBuscado.stock--
-            localStorage.setItem("cart", JSON.stringify(cart))
-        } else {
-            alert("No hay más stock del producto seleccionado")
-        }
+    
+    // Mover la inicialización de selectedVarianteIndex aquí después de verificar si form existe
+    if (form) {
+        selectedVarianteIndex = Number(form.querySelector(`input[name="variante-${id}"]:checked`).value)
     }
-
-    // Actualizar el contador del carrito
-    updateCartCounter()
+    
+    let productoEnCarrito = cart.find(producto => producto.id === productoBuscado.id && producto.varianteIndex === selectedVarianteIndex)
+    
+    if (productoBuscado) {
+        if (productoBuscado.variedad && productoBuscado.variedad.length > 0) {
+            if (selectedVarianteIndex >= 0 && productoBuscado.variedad[selectedVarianteIndex].stock > 0) {
+                if (productoEnCarrito) {
+                    productoEnCarrito.unidades++
+                    productoEnCarrito.subtotal = productoEnCarrito.unidades * productoEnCarrito.precioUnitario
+                    addToast(productoBuscado.nombre)
+                } else {
+                    cart.push({
+                        id: productoBuscado.id,
+                        nombre: productoBuscado.nombre,
+                        precioUnitario: productoBuscado.variedad[selectedVarianteIndex].precio,
+                        unidades: 1,
+                        subtotal: productoBuscado.variedad[selectedVarianteIndex].precio,
+                        rutaImagen: productoBuscado.rutaImagen,
+                        varianteIndex: selectedVarianteIndex
+                    })
+                    addToast(productoBuscado.nombre)
+                }
+                productoBuscado.variedad[selectedVarianteIndex].stock--
+                localStorage.setItem("cart", JSON.stringify(cart))
+            } else {
+                addToastFalse()
+            }
+        } else {
+            if (productoBuscado.stock > 0) {
+                if (productoEnCarrito) {
+                    productoEnCarrito.unidades++
+                    productoEnCarrito.subtotal = productoEnCarrito.unidades * productoEnCarrito.precioUnitario
+                    addToast(productoBuscado.nombre)
+                } else {
+                    cart.push({
+                        id: productoBuscado.id,
+                        nombre: productoBuscado.nombre,
+                        precioUnitario: productoBuscado.precio,
+                        unidades: 1,
+                        subtotal: productoBuscado.precio,
+                        rutaImagen: productoBuscado.rutaImagen,
+                        varianteIndex: selectedVarianteIndex
+                    })
+                    addToast(productoBuscado.nombre)
+                }
+                productoBuscado.stock--
+                localStorage.setItem("cart", JSON.stringify(cart))
+            } else {
+                addToastFalse()
+            }
+        }
+        
+        updateCartCounter()
+    }
 }
 
 function updateCartCounter() {
     let btnCart = document.getElementById("cartUpdate")
     let cartCounter = btnCart.querySelector(".badge")
-
+    
     if (cart.length > 0) {
         btnCart.classList.remove("d-none")
         if (!cartCounter) {
@@ -348,68 +356,93 @@ function updateCartCounter() {
         }
         cartCounter.textContent = cart.reduce((total, producto) => total + producto.unidades, 0)
     } else {
+        
         btnCart.classList.add("d-none")
         if (cartCounter) {
             cartCounter.remove()
         }
     }
 
-    // Función para lanzar modal con productos agregados
     btnCart.addEventListener("click", () => {
         popUpCart()
     })
 }
+
 function popUpCart() {
     let modalCart = document.getElementById("cartModal")
     let modalBody = modalCart.querySelector(".modal-body")
 
-    // Borrar el contenido actual del modal
     modalBody.innerHTML = ""
 
-    // Inicializamos la variable para calcular el total
     let total = 0
 
-    cart.forEach((producto) => {
+    let groupedCart = groupCartByProduct(cart)
+
+    for (let group of groupedCart) {
         let productoDiv = document.createElement("div")
         productoDiv.className = "mb-2"
 
-        // Agregar la imagen del producto
+        let producto = group[0]
+
         let imagenProducto = document.createElement("img")
         imagenProducto.src = `./assets/img/${producto.rutaImagen}`
         imagenProducto.className = "cart-product-image"
         productoDiv.appendChild(imagenProducto)
 
-        // Agregar el nombre del producto
         let nombreProducto = document.createElement("span")
-        nombreProducto.textContent = producto.nombre
+
+        // Agregar la variedad de peso si existe
+        if (producto.variedad && producto.variedad.peso) {
+            nombreProducto.textContent = `${producto.nombre} - Peso: ${producto.variedad.peso} kg`
+        } else {
+            nombreProducto.textContent = `${producto.nombre}`
+        }
+
         nombreProducto.className = "cart-product-name"
         productoDiv.appendChild(nombreProducto)
 
-        // Agregar la cantidad
-        let cantidadProducto = document.createElement("span")
-        cantidadProducto.textContent = `Cantidad: ${producto.unidades}`
-        cantidadProducto.className = "cart-product-quantity"
-        productoDiv.appendChild(cantidadProducto)
+        let totalGrupo = 0
 
-        // Calcular y agregar el subtotal
+        for (let item of group) {
+            let cantidadProducto = document.createElement("span")
+            cantidadProducto.textContent = ` - Cantidad: ${item.unidades}`
+
+            cantidadProducto.textContent += ` - Precio: $${item.precioUnitario} - Subtotal: $${item.subtotal}`
+            cantidadProducto.className = "cart-product-quantity"
+            productoDiv.appendChild(cantidadProducto)
+
+            totalGrupo += item.subtotal
+        }
+
         let subtotalProducto = document.createElement("span")
-        subtotalProducto.textContent = `Subtotal: $${producto.subtotal}`
         subtotalProducto.className = "cart-product-subtotal"
         productoDiv.appendChild(subtotalProducto)
 
-        // Actualizar el total
-        total += producto.subtotal
+        total += totalGrupo
 
         modalBody.appendChild(productoDiv)
-    })
+    }
 
-    // Agregar el total al final
     let totalDiv = document.createElement("div")
     totalDiv.className = "cart-total"
     totalDiv.textContent = `Total: $${total}`
     modalBody.appendChild(totalDiv)
+}
 
+function groupCartByProduct(cart) {
+    let groupedCart = []
 
+    for (let item of cart) {
+        let existingGroup = groupedCart.find(group => group[0].id === item.id && group[0].varianteIndex === item.varianteIndex)
+
+        if (existingGroup) {
+            existingGroup.push(item)
+        } else {
+            groupedCart.push([item])
+        }
+    }
+
+    return groupedCart
 }
 
 function comprar() {
@@ -433,18 +466,50 @@ function comprar() {
     })
 }
 
+// Toast para agregar a stock
+function addToast(productoNombre) {
+    Toastify({
+        text: `Agregaste ${productoNombre} al carrito`,
+        duration: 3000,
+        style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+        }
+    }).showToast()
+}
+
+// Toast para falla en stock
+function addToastFalse() {
+    Toastify({
+        text: `No queda existencias del producto`,
+        duration: 3000,
+        style: {
+            background: "linear-gradient(to right, #e93750, #900e3c)",
+        }
+    }).showToast()
+}
+
 comprar()
 
 createCards(productos, cart)
 
+// Captura de botón de búsqueda y el input
 let botonBuscar = document.getElementById("search-button")
 let searchInput = document.getElementById("form-imput-search")
 
+// Convierte el texto de búsqueda a minúsculas antes de comparar
+let searchText = searchInput.value.trim().toLowerCase();
+
+// Productos a minúsculas antes de comparar
+let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText));
+
+
 botonBuscar.addEventListener("click", () => {
     let searchText = searchInput.value.trim().toLowerCase()
-    let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText))
-    createCards(searchFilter)
+    let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText));
+    createCards(searchFilter, cart)
+    // Productos filtrados aquí
 })
+
 
 // Función para restablecer todos los productos sin filtrar
 function resetProducts() {
@@ -461,13 +526,13 @@ btnTienda.addEventListener("click", resetProducts)
 let btnPerro = document.getElementById("perro")
 btnPerro.addEventListener("click", () => {
     let searchFilter = productos.filter(producto => producto.especie.toLowerCase().includes("perro"))
-    createCards(searchFilter)
+    createCards(searchFilter, cart)
 })
 
 let btnGato = document.getElementById("gato")
 btnGato.addEventListener("click", () => {
     let searchFilter = productos.filter(producto => producto.especie.toLowerCase().includes("gato"))
-    createCards(searchFilter)
+    createCards(searchFilter, cart)
 })
 
 // Iniciar contador al cargar todo el DOM
@@ -475,42 +540,50 @@ document.addEventListener("DOMContentLoaded", () => {
     updateCartCounter()
 })
 
-
 // Filtro para categorias laterales
 function generarOpcionesCategoria(productos) {
-    const categoriaFiltro = document.getElementById("categoria-filtro")
-    const categorias = [...new Set(productos.map((producto) => producto.categoria))]
+    let categoriaFiltro = document.getElementById("categoria-filtro")
+    let categorias = [...new Set(productos.map((producto) => producto.categoria))]
 
     categorias.forEach((categoria) => {
-        const listItem = document.createElement("li")
+        let listItem = document.createElement("li")
         listItem.innerHTML = `<label><input type="checkbox" value="${categoria}"> ${categoria}</label>`
         categoriaFiltro.appendChild(listItem)
-    });
+    })
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     // Generar las opciones de categoría al cargar la página
     generarOpcionesCategoria(productos)
 
-    const aplicarFiltrosBtn = document.getElementById("aplicar-filtros")
-    const limpiarFiltrosBtn = document.getElementById("limpiar-filtros")
+    let aplicarFiltrosBtn = document.getElementById("aplicar-filtros")
+    let limpiarFiltrosBtn = document.getElementById("limpiar-filtros")
 
     aplicarFiltrosBtn.addEventListener("click", () => {
         // Obtener los valores seleccionados para categoría y rango de precios
-        const categoriaSeleccionada = Array.from(document.querySelectorAll("#categoria-filtro input:checked")).map(
+        let categoriaSeleccionada = Array.from(document.querySelectorAll("#categoria-filtro input:checked")).map(
             (checkbox) => checkbox.value
-        );
-        const precioMin = document.getElementById("precio-min").value
-        const precioMax = document.getElementById("precio-max").value
-
+        )
+        let precioMin = document.getElementById("precio-min").value
+        let precioMax = document.getElementById("precio-max").value
+        
         // Filtrar productos según los criterios seleccionados
-        const productosFiltrados = productos.filter((producto) => {
-            const categoriaCoincide = categoriaSeleccionada.length === 0 || categoriaSeleccionada.includes(producto.categoria)
-            const precioCoincide =
-                (!precioMin || producto.precio >= precioMin) && (!precioMax || producto.precio <= precioMax)
+        let productosFiltrados = productos.filter((producto) => {
+        let categoriaCoincide = categoriaSeleccionada.length === 0 || categoriaSeleccionada.includes(producto.categoria)
+
+        if (producto.variedad && producto.variedad.length > 0) {
+            // Si el producto tiene variedades, verificar si alguna variedad coincide con el rango de precios
+            let algunaVariedadCoincide = producto.variedad.some(
+                (variedad) =>
+                    (!precioMin || variedad.precio >= precioMin) && (!precioMax || variedad.precio <= precioMax)
+            )
+            return categoriaCoincide && algunaVariedadCoincide
+        } else {
+            // Si el producto no tiene variedades, verificar si el precio del producto coincide con el rango de precios
+            let precioCoincide = (!precioMin || producto.precio >= precioMin) && (!precioMax || producto.precio <= precioMax)
             return categoriaCoincide && precioCoincide
-        });
+        }
+        })
 
         // Actualizar la lista de productos con los productos filtrados
         createCards(productosFiltrados, cart)
