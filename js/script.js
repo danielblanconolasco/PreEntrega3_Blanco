@@ -497,15 +497,15 @@ let botonBuscar = document.getElementById("search-button")
 let searchInput = document.getElementById("form-imput-search")
 
 // Convierte el texto de búsqueda a minúsculas antes de comparar
-let searchText = searchInput.value.trim().toLowerCase();
+let searchText = searchInput.value.trim().toLowerCase()
 
 // Productos a minúsculas antes de comparar
-let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText));
+let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText))
 
 
 botonBuscar.addEventListener("click", () => {
     let searchText = searchInput.value.trim().toLowerCase()
-    let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText));
+    let searchFilter = productos.filter(producto => producto.nombre.toLowerCase().includes(searchText))
     createCards(searchFilter, cart)
     // Productos filtrados aquí
 })
