@@ -1,13 +1,18 @@
-// Prueba de fetch funcionando
-fetch('https://jsonplaceholder.typicode.com/posts/1')
-.then((response) => response.json())
-.then((json) => console.log(json))
-
-// mi fetch que no funciona
-fetch('./JSON/products.json')
-.then (respuesta => respuesta.json())
-.then (productos => console.log(productos))
-.catch(error => console.log("Error"))
+// Fetch para obtener los productos desde el el JSON
+fetch('./json/products.json')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('No se pudieron obtener los productos')
+        }
+        return response.json()
+    })
+    .then(productos => {
+        // Se muestran productos
+        createCards(productos, cart)
+    })
+    .catch(error => {
+        console.error('Error al obtener los productos:', error)
+    })
 
 
 // Función para generar un ID único usando un contador incremental
@@ -15,9 +20,8 @@ let contadorID = 1
 function generarIDUnico() {
     return contadorID++
 }
-
-// Array de productos en objetos
 /*
+// Array de productos en objetos
 let productos = [
     {
         id: generarIDUnico(),
@@ -503,7 +507,7 @@ function addToastFalse() {
 
 comprar()
 
-createCards(productos, cart)
+// createCards(productos, cart)
 
 // Captura de botón de búsqueda y el input
 let botonBuscar = document.getElementById("search-button")
