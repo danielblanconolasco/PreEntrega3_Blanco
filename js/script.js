@@ -1,5 +1,5 @@
 // Fetch para obtener los productos desde el el JSON
-fetch('./json/products.json')
+fetch('./JSON/products.json')
     .then(response => {
         if (!response.ok) {
             throw new Error('No se pudieron obtener los productos')
@@ -9,6 +9,7 @@ fetch('./json/products.json')
     .then(productos => {
         // Se muestran productos
         createCards(productos, cart)
+        return productos
     })
     .catch(error => {
         console.error('Error al obtener los productos:', error)
