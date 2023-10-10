@@ -1,26 +1,3 @@
-// Fetch para obtener los productos desde el el JSON
-fetch('./JSON/products.json')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('No se pudieron obtener los productos')
-        }
-        return response.json()
-    })
-    .then(productos => {
-        // Se muestran productos
-        createCards(productos, cart)
-        return productos
-    })
-    .catch(error => {
-        console.error('Error al obtener los productos:', error)
-    })
-
-
-// Función para generar un ID único usando un contador incremental
-let contadorID = 1
-function generarIDUnico() {
-    return contadorID++
-}
 /*
 // Array de productos en objetos
 let productos = [
@@ -196,6 +173,34 @@ let productos = [
     },
 ]
 */
+
+let productos = [] // Declaración global
+
+// Fetch para obtener los productos desde el JSON
+fetch('./JSON/products.json')
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('No se pudieron obtener los productos')
+        }
+        return response.json()
+    })
+    .then(data => {
+        // Asigna los productos a la variable global
+        productos = data;
+        createCards(productos, cart)
+        generarOpcionesCategoria(productos)
+    })
+    .catch(error => {
+        console.error('Error al obtener los productos', error)
+    })
+
+
+// Función para generar un ID único usando un contador incremental
+let contadorID = 1
+function generarIDUnico() {
+    return contadorID++
+}
+
 let cartRecover = localStorage.getItem("cart")
 let cart = cartRecover ? JSON.parse(cartRecover) : []
 
@@ -293,6 +298,7 @@ function createCards(productos, cart) {
             colDiv.appendChild(cardProducto)
             products.appendChild(colDiv)
         })
+        return productos
     }
 }
 
@@ -571,8 +577,8 @@ function generarOpcionesCategoria(productos) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Generar las opciones de categoría al cargar la página
-    generarOpcionesCategoria(productos)
+    // Generar las opciones de categoría al cargar la páginase reemplaza por llamado en el fetch
+    // generarOpcionesCategoria(productos)
 
     let aplicarFiltrosBtn = document.getElementById("aplicar-filtros")
     let limpiarFiltrosBtn = document.getElementById("limpiar-filtros")
