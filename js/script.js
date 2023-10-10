@@ -178,15 +178,10 @@ let productos = [] // Declaración global
 
 // Fetch para obtener los productos desde el JSON
 fetch('./JSON/products.json')
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('No se pudieron obtener los productos')
-        }
-        return response.json()
-    })
+    .then(response => response.json())
     .then(data => {
         // Asigna los productos a la variable global
-        productos = data;
+        productos = data
         createCards(productos, cart)
         generarOpcionesCategoria(productos)
     })
