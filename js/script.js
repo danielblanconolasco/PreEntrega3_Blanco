@@ -1,3 +1,15 @@
+// Prueba de fetch funcionando
+fetch('https://jsonplaceholder.typicode.com/posts/1')
+.then((response) => response.json())
+.then((json) => console.log(json))
+
+// mi fetch que no funciona
+fetch('./JSON/products.json')
+.then (respuesta => respuesta.json())
+.then (productos => console.log(productos))
+.catch(error => console.log("Error"))
+
+
 // Función para generar un ID único usando un contador incremental
 let contadorID = 1
 function generarIDUnico() {
@@ -5,6 +17,7 @@ function generarIDUnico() {
 }
 
 // Array de productos en objetos
+/*
 let productos = [
     {
         id: generarIDUnico(),
@@ -177,7 +190,7 @@ let productos = [
         especie: "perro / gato",
     },
 ]
-
+*/
 let cartRecover = localStorage.getItem("cart")
 let cart = cartRecover ? JSON.parse(cartRecover) : []
 
