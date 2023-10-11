@@ -250,7 +250,7 @@ function createCards(productos, cart) {
                     radioInput.value = index
                     radioInput.required = true
 
-                    let labelText = document.createTextNode(`${variante.peso} kg - $ ${variante.precio}`)
+                    let labelText = document.createTextNode(`${variante.peso} kg - ${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(variante.precio)}`)
 
                     label.appendChild(radioInput)
                     label.appendChild(labelText)
@@ -273,7 +273,7 @@ function createCards(productos, cart) {
 
             } else {
                 let precioTexto = document.createElement("p")
-                precioTexto.textContent = `$ ${precio}`
+                precioTexto.textContent = `${new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(precio)}`
 
                 let addButton = document.createElement("button")
                 addButton.className = "btn btn-primary btn-sm btn-violet w-100"
