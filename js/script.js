@@ -299,16 +299,16 @@ function createCards(productos, cart) {
 
 function AddProductCart(productos, cart, id, form) {
     let selectedVarianteIndex = -1
-    
+
     let productoBuscado = productos.find(producto => producto.id === Number(id))
-    
+
     // Mover la inicialización de selectedVarianteIndex aquí después de verificar si form existe
     if (form) {
         selectedVarianteIndex = Number(form.querySelector(`input[name="variante-${id}"]:checked`).value)
     }
-    
+
     let productoEnCarrito = cart.find(producto => producto.id === productoBuscado.id && producto.varianteIndex === selectedVarianteIndex)
-    
+
     if (productoBuscado) {
         if (productoBuscado.variedad && productoBuscado.variedad.length > 0) {
             if (selectedVarianteIndex >= 0 && productoBuscado.variedad[selectedVarianteIndex].stock > 0) {
@@ -357,7 +357,7 @@ function AddProductCart(productos, cart, id, form) {
                 addToastFalse()
             }
         }
-        
+
         updateCartCounter()
     }
 }
@@ -365,7 +365,7 @@ function AddProductCart(productos, cart, id, form) {
 function updateCartCounter() {
     let btnCart = document.getElementById("cartUpdate")
     let cartCounter = btnCart.querySelector(".badge")
-    
+
     if (cart.length > 0) {
         btnCart.classList.remove("d-none")
         if (!cartCounter) {
@@ -375,7 +375,7 @@ function updateCartCounter() {
         }
         cartCounter.textContent = cart.reduce((total, producto) => total + producto.unidades, 0)
     } else {
-        
+
         btnCart.classList.add("d-none")
         if (cartCounter) {
             cartCounter.remove()
@@ -471,10 +471,10 @@ function comprar() {
         cart = [] // Borra el carrito en memoria
         localStorage.removeItem("cart") // Borra el carrito en el almacenamiento local
         updateCartCounter() // Actualiza el contador del carrito
-    
+
         let modalCart = document.getElementById("cartModal")
         let modalBody = modalCart.querySelector(".modal-body")
-    
+
         // Borrar el contenido actual del modal
         modalBody.innerHTML = `Gracias por tu compra`
 
@@ -585,23 +585,23 @@ document.addEventListener("DOMContentLoaded", () => {
         )
         let precioMin = document.getElementById("precio-min").value
         let precioMax = document.getElementById("precio-max").value
-        
+
         // Filtrar productos según los criterios seleccionados
         let productosFiltrados = productos.filter((producto) => {
-        let categoriaCoincide = categoriaSeleccionada.length === 0 || categoriaSeleccionada.includes(producto.categoria)
+            let categoriaCoincide = categoriaSeleccionada.length === 0 || categoriaSeleccionada.includes(producto.categoria)
 
-        if (producto.variedad && producto.variedad.length > 0) {
-            // Si el producto tiene variedades, verificar si alguna variedad coincide con el rango de precios
-            let algunaVariedadCoincide = producto.variedad.some(
-                (variedad) =>
-                    (!precioMin || variedad.precio >= precioMin) && (!precioMax || variedad.precio <= precioMax)
-            )
-            return categoriaCoincide && algunaVariedadCoincide
-        } else {
-            // Si el producto no tiene variedades, verificar si el precio del producto coincide con el rango de precios
-            let precioCoincide = (!precioMin || producto.precio >= precioMin) && (!precioMax || producto.precio <= precioMax)
-            return categoriaCoincide && precioCoincide
-        }
+            if (producto.variedad && producto.variedad.length > 0) {
+                // Si el producto tiene variedades, verificar si alguna variedad coincide con el rango de precios
+                let algunaVariedadCoincide = producto.variedad.some(
+                    (variedad) =>
+                        (!precioMin || variedad.precio >= precioMin) && (!precioMax || variedad.precio <= precioMax)
+                )
+                return categoriaCoincide && algunaVariedadCoincide
+            } else {
+                // Si el producto no tiene variedades, verificar si el precio del producto coincide con el rango de precios
+                let precioCoincide = (!precioMin || producto.precio >= precioMin) && (!precioMax || producto.precio <= precioMax)
+                return categoriaCoincide && precioCoincide
+            }
         })
 
         // Actualizar la lista de productos con los productos filtrados
